@@ -1,0 +1,67 @@
+version: "3.7"
+
+services:
+  controller:
+    image: repo/controller:1.2.0
+    environment:
+      SQL_DRIVER: mysql
+      DATABASE_SOURCE: "magma:magmaPass(172.18.10.2)/magma" # Check this line carefuly.
+      SQL_DIALECT: maria
+    volumes:
+      - /magma/certs:/var/opt/magma/certs
+    deploy:
+      placement:
+        constraints: [node.labels.controller == true]
+  nginx:
+    image: repo/nginx:1.2.0
+    ports:
+      - 7443:8443/tcp   # controller GRPC port
+      - 7444:8444/tcp  # Bootstrapper port
+      - 9443:9443/tcp  # API/controller port
+    environment:
+      CONTROLLER_HOSTNAME: controller.yota.co.ni
+      PROXY_BACKENDS: controller  # Uses Docker internal DNS for controller
+      RESOLVER: "127.0.0.11"
+    volumes:
+      - /magma/certs:/var/opt/magma/certs
+    deploy:
+      placement:
+        constraints: [node.labels.controller == true]
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.3.1
+    environment:
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+      - 9300:9300
+    volumes:
+      - elasticsearch:/usr/share/elasticsearch/data
+
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.3.1
+    ports:
+      - 5601:5601
+    links:
+      - elasticsearch
+
+  fluentd:
+    image: repo/fluentd:0907
+    links:
+      - elasticsearch
+    # 24224 for TLS secure forwarding, 24225 for unsecured docker logging
+    ports:
+      - 24224:24224
+      - 24224:24224/udp
+      - 24225:24225
+      - 24225:24225/udp
+    volumes:
+      - /magma/fluentd/conf:/fluentd/etc
+      - /magma/certs:/var/opt/magma/certs
+    deploy:
+      placement:
+        constraints: [node.labels.controller == true]
+
+volumes:
+  elasticsearch:
