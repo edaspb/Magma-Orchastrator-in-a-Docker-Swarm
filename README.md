@@ -28,7 +28,9 @@ All steps are executed on orch1 server only.
 1.9 `FLUSH PRIVILEGES;`
 1.10 `exit`
 
-1.11 Open file `/etc/mysql/mariadb.cnf`. Put to the end `sql_mode="ANSI_QUOTES"`
+1.11 In a  file `/etc/mysql/mariadb.cnf`. Put to the end `sql_mode="ANSI_QUOTES"`
+1.12 In a file `/etc/mysql/my.cnf` `bind-address            = 0.0.0.0`
+1.13 `service mariadb restart`
 
 2. Docker Swarm Installation
 
