@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   controller:
-    image: repo/controller:1.2.0
+    image: repo/controller:1.2.0 ## Use your repo here
     environment:
       SQL_DRIVER: mysql
       DATABASE_SOURCE: "magma:magmaPass(172.18.10.2)/magma" # Check this line carefuly.
@@ -13,7 +13,7 @@ services:
       placement:
         constraints: [node.labels.controller == true]
   nginx:
-    image: repo/nginx:1.2.0
+    image: repo/nginx:1.2.0 ## Use your repo here
     ports:
       - 7443:8443/tcp   # controller GRPC port
       - 7444:8444/tcp  # Bootstrapper port
