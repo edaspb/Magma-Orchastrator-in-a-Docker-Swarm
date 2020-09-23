@@ -1,0 +1,45 @@
+version: "3.7"
+
+services:
+  magmalte:
+    image: repo/magmalte:1.2.0
+    command: "/usr/local/bin/wait-for-it.sh -s -t 30 10.202.130.4:3306 -- yarn run start:dev"
+    ports:
+      - "8081:8081"
+    environment:
+      API_CERT_FILENAME: /run/secrets/api_cert
+      API_PRIVATE_KEY_FILENAME: /run/secrets/api_key
+      API_HOST: nginx:9443
+      PORT: 8081
+      HOST: 0.0.0.0
+      MYSQL_HOST: 172.18.10.2 ## Do not forget to change
+      MYSQL_DB: nms
+      MYSQL_USER: nms 
+      MYSQL_PASS: nmsPass  ## Do not forget to change
+      MAPBOX_ACCESS_TOKEN: ${MAPBOX_ACCESS_TOKEN:-}
+      MYSQL_DIALECT: mariadb
+    restart: on-failure
+    secrets:
+      - api_cert
+      - api_key
+    deploy:
+      placement:
+        constraints: [node.labels.controller == true]
+
+  nginx-proxy:
+    image: nginx
+    ports:
+      - "443:443"
+    volumes:
+      - /magma/docker_ssl_proxy:/etc/nginx/conf.d
+    depends_on:
+      - magmalte
+    deploy:
+      placement:
+        constraints: [node.labels.controller == true]
+
+secrets:
+  api_cert:
+    file: /magma/certs/admin_operator.pem
+  api_key:
+    file: /magma/certs/admin_operator.key.pem
