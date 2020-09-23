@@ -5,7 +5,7 @@ Links:
 Magma Platform: https://github.com/magma/magma  
 Docker Swarm: https://docs.docker.com/engine/install/debian/  
   
-Originally Orchestrator enviroment is designed for deployment in AWS platform.  
+Originally Orchestrator enviroment is designed for deployment on AWS platform.  
 This guide describes the step how to deploy Orchestrator on your local cloud.  
 ![VM Image](https://raw.githubusercontent.com/edaspb/Magma-Orchastrator-in-a-Docker-Swarm/master/MagmaSwarm.png)  
 Prerequisites  
