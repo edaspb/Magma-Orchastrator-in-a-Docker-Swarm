@@ -1,0 +1,85 @@
+version: "3.7"
+
+services:
+  prometheus-cache:
+    image: repo/prometheus-cache:v1.2.0
+    ports:
+      - 9091:9091/tcp
+    command:
+      - '-limit=500000'
+    deploy:
+      placement:
+        constraints: [node.labels.metrics == true]
+
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090/tcp
+    volumes:
+      - /magma/prometheus:/prometheus
+      - /magma/prometheus-configurer/configs:/etc/prometheus:ro
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+    deploy:
+      placement:
+        constraints: [node.labels.metrics == true]
+
+  alertmanager:
+    image: prom/alertmanager
+    ports:
+      - 9093:9093/tcp
+    volumes:
+      - /magma/alertmanager-configurer/configs:/etc/configs:ro
+    deploy:
+      placement:
+        constraints: [node.labels.metrics == true]
+
+  prometheus-configurer:
+    image: repo/prometheus-configurer:0624
+    volumes:
+      - /magma/prometheus-configurer/configs:/etc/configs
+    command:
+      - '-port=9100'
+      - '-rules-dir=/etc/configs/alert_rules'
+      - '-prometheusURL=prometheus:9090'
+      - '-multitenant-label=networkID'
+      - '-restrict-queries'
+    deploy:
+      placement:
+        constraints: [node.labels.metrics == true]
+
+  alertmanager-configurer:
+    image: repo/alertmanager-configurer:v1.1.0
+    volumes:
+      - /magma/alertmanager-configurer/configs:/etc/configs
+    command:
+      - '-port=9101'
+      - '-alertmanager-conf=/etc/configs/alertmanager.yml'
+      - '-alertmanagerURL=alertmanager:9093'
+      - '-multitenant-label=networkID'
+    deploy:
+      placement:
+        constraints: [node.labels.metrics == true]
+
+  user-grafana:
+    image: grafana/grafana:6.6.2
+    volumes:
+      - userGrafanaData:/var/lib/grafana
+    ports:
+      - 3000:3000/tcp
+    environment:
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_USERS_AUTO_ASSIGN_ORG=false
+      - GF_AUTH_PROXY_ENABLED=true
+      - GF_AUTH_PROXY_HEADER_NAME=X-WEBAUTH-USER
+      - GF_AUTH_PROXY_HEADER_PROPERTY=username
+      - GF_AUTH_PROXY_AUTO_SIGN_UP=false
+      - GF_SERVER_ROOT_URL=/grafana
+    deploy:
+      placement:
+        constraints: [node.labels.metrics == true]
+
+volumes:
+  userGrafanaData:
