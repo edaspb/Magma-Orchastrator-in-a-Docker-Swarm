@@ -10,7 +10,7 @@ This guide describes the step how to deploy Orchestrator on your local cloud.
 ![VM Image](https://raw.githubusercontent.com/edaspb/Magma-Orchastrator-in-a-Docker-Swarm/master/MagmaSwarm.png)  
 Prerequisites  
 1. Built and published Orchestrator Containers. See https://magma.github.io/magma/docs/orc8r/deploy_build  
-2. At least one VM with Debian 10.5 or Ubuntu Server 20.04 installed. Two or more VM is recommended.  
+2. At least one VM with Debian 10.5 or Ubuntu Server 20.04 installed. It is recommended two or more VM.  
 
 ## 1. MariaDB installation and configuration ##  
   
