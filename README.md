@@ -85,6 +85,8 @@ On Orch1:
   
 ## 6. Create Certificate chain ##  
 
+On Orch1:  
+
 6.1 `wget https://raw.githubusercontent.com/edaspb/Magma-Orchastrator-in-a-Docker-Swarm/master/scripts/certs.sh`  
 6.2 Open certs.sh script, put your data: Country, Company, email, etc.  
 6.3 `chmod +x certs.sh`  
@@ -92,12 +94,17 @@ On Orch1:
 
 ## 7. Roll out Controller and Metrics stack ##  
 
+On Orch1:  
+
 7.1 `wget https://raw.githubusercontent.com/edaspb/Magma-Orchastrator-in-a-Docker-Swarm/master/compose/docker-compose-controller.yml`  
 7.2 `wget https://raw.githubusercontent.com/edaspb/Magma-Orchastrator-in-a-Docker-Swarm/master/compose/docker-compose-metrics.yml`  
 7.3 `docker stack deploy --compose-file docker-compose-controller.yml magma`  
 7.4 `docker stack deploy --compose-file docker-compose-metrics.yml magma`  
   
 ## 8. Create NMS Certificate ##  
+
+On Orch1:  
+
 8.1 `export cntrl_con=magma_controller.1.$(docker service ps -f 'name=magma_controller.1' magma_controller -q --no-trunc | head -n1)`  
 8.2 `docker exec -it $cntrl_con bash -c "envdir /var/opt/magma/envdir /var/opt/magma/bin/accessc add-admin -duration 3650 -cert /var/opt/magma/bin/admin_operator admin_operator"`  
 8.3 `docker exec -it $cntrl_con bash -c "openssl pkcs12 -export -out /var/opt/magma/bin/admin_operator.pfx -inkey /var/opt/magma/bin/admin_operator.key.pem -in /var/opt/magma/bin/admin_operator.pem"`  
@@ -105,6 +112,8 @@ On Orch1:
 8.4 `for certfile in admin_operator.pem admin_operator.key.pem admin_operator.pfx; do docker cp ${cntrl_con}:/var/opt/magma/bin/${certfile} /magma/certs//${certfile}; done`  
   
 ## 9 Roll out NMS stack ##  
+
+On Orch1:  
   
 9.1 `wget https://raw.githubusercontent.com/edaspb/Magma-Orchastrator-in-a-Docker-Swarm/master/compose/docker-compose-nms.yml`  
 9.2 `docker stack deploy --compose-file docker-compose-nms.yml magma`  
