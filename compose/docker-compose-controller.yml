@@ -47,7 +47,7 @@ services:
       - elasticsearch
 
   fluentd:
-    image: repo/fluentd:0907
+    image: repo/fluentd:1.2.0 ## Use your repo here
     links:
       - elasticsearch
     # 24224 for TLS secure forwarding, 24225 for unsecured docker logging
