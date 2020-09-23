@@ -5,12 +5,12 @@ Links:
 Magma Platform: https://github.com/magma/magma  
 Docker Swarm: https://docs.docker.com/engine/install/debian/  
   
-Originally Orchestrator's enviroment is designed for deployment in AWS platform.  
+Originally Orchestrator enviroment is designed for deployment in AWS platform.  
 This guide describes the step how to deploy Orchestrator on your local cloud.  
   
 Prerequisites  
 1. Built and published Orchestrator Containers. See https://magma.github.io/magma/docs/orc8r/deploy_build  
-2. At least one VM with Debian 10.5 or Ubuntu Server 20.04. Two or more VM is recommended.  
+2. At least one VM with Debian 10.5 or Ubuntu Server 20.04 installed. Two or more VM is recommended.  
 
 ## 1. MariaDB installation and configuration ##  
   
