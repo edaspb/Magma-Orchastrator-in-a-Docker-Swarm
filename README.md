@@ -46,6 +46,7 @@ add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(
 ## 3. Docker Swarm Activation ##  
 
 On orch1 VM. (Please don't forget to change IP address):  
+  
 3.1 `docker swarm init --advertise-addr 172.18.10.2`  
 Orch1 became Master Swarm node  
 3.2 Copy output string from previous command (something like "docker swarm join --token XXXXX")  
