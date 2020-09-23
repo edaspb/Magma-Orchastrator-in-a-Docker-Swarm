@@ -50,7 +50,7 @@ On orch1 VM. (Please don't forget to change IP address):
 Orch1 became Master Swarm node  
 3.2 Copy output string from previous command (something like "docker swarm join --token XXXXX")  
 Then, on orch2 VM:  
-3.3 Apply the command which you copy on step 3.2  
+3.3 Apply the command which you've copied on step 3.2  
 On orch1, label nodes:  
 3.4 `docker node update --label-add controller=true orch1`  
 3.5 `docker node update --label-add metrics=true orch2`  
