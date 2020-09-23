@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   magmalte:
-    image: repo/magmalte:1.2.0
+    image: repo/magmalte:1.2.0 ## Use your repo here
     command: "/usr/local/bin/wait-for-it.sh -s -t 30 10.202.130.4:3306 -- yarn run start:dev"
     ports:
       - "8081:8081"
