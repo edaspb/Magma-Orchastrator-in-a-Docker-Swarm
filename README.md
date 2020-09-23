@@ -84,17 +84,17 @@ On Orch1:
   
 ## 6. Create Certificate chain ##  
 
-6.1 wget https://raw.githubusercontent.com/edaspb/Magma-Orchastrator-in-a-Docker-Swarm/master/scripts/certs.sh  
+6.1 `wget https://raw.githubusercontent.com/edaspb/Magma-Orchastrator-in-a-Docker-Swarm/master/scripts/certs.sh`  
 6.2 Open certs.sh script, put your data: Country, Company, email, etc.  
-6.3 chmod +x certs.sh  
-6.4 ./certs.sh  
+6.3 `chmod +x certs.sh`  
+6.4 `./certs.sh`  
 
 ## 7. Roll out Controller and Metrics stack ##  
 
-7.1 wget https://raw.githubusercontent.com/edaspb/Magma-Orchastrator-in-a-Docker-Swarm/master/compose/docker-compose-controller.yml  
-7.2 wget https://raw.githubusercontent.com/edaspb/Magma-Orchastrator-in-a-Docker-Swarm/master/compose/docker-compose-metrics.yml  
-7.3 docker stack deploy --compose-file docker-compose-controller.yml magma  
-7.4 docker stack deploy --compose-file docker-compose-metrics.yml magma  
+7.1 `wget https://raw.githubusercontent.com/edaspb/Magma-Orchastrator-in-a-Docker-Swarm/master/compose/docker-compose-controller.yml`  
+7.2 `wget https://raw.githubusercontent.com/edaspb/Magma-Orchastrator-in-a-Docker-Swarm/master/compose/docker-compose-metrics.yml`  
+7.3 `docker stack deploy --compose-file docker-compose-controller.yml magma`  
+7.4 `docker stack deploy --compose-file docker-compose-metrics.yml magma`  
   
 ## 8. Create NMS Certificate ##  
 8.1 `export cntrl_con=magma_controller.1.$(docker service ps -f 'name=magma_controller.1' magma_controller -q --no-trunc | head -n1)`  
