@@ -2,7 +2,7 @@ version: "3.7"
 
 services:
   prometheus-cache:
-    image: repo/prometheus-cache:v1.2.0
+    image: repo/prometheus-cache:v1.2.0 ## Use your repo here
     ports:
       - 9091:9091/tcp
     command:
@@ -37,7 +37,7 @@ services:
         constraints: [node.labels.metrics == true]
 
   prometheus-configurer:
-    image: repo/prometheus-configurer:0624
+    image: repo/prometheus-configurer:1.2.0 ## Use your repo here
     volumes:
       - /magma/prometheus-configurer/configs:/etc/configs
     command:
@@ -51,7 +51,7 @@ services:
         constraints: [node.labels.metrics == true]
 
   alertmanager-configurer:
-    image: repo/alertmanager-configurer:v1.1.0
+    image: repo/alertmanager-configurer:1.2.0 ## Use your repo here
     volumes:
       - /magma/alertmanager-configurer/configs:/etc/configs
     command:
