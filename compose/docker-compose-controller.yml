@@ -19,7 +19,7 @@ services:
       - 7444:8444/tcp  # Bootstrapper port
       - 9443:9443/tcp  # API/controller port
     environment:
-      CONTROLLER_HOSTNAME: controller.yota.co.ni
+      CONTROLLER_HOSTNAME: controller.yourdomain.com # Don't forget to make change here
       PROXY_BACKENDS: controller  # Uses Docker internal DNS for controller
       RESOLVER: "127.0.0.11"
     volumes:
