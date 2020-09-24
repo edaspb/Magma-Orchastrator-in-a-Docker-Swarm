@@ -110,7 +110,7 @@ On Orch1:
 8.2 `docker exec -it $cntrl_con bash -c "envdir /var/opt/magma/envdir /var/opt/magma/bin/accessc add-admin -duration 3650 -cert /var/opt/magma/bin/admin_operator admin_operator"`  
 8.3 `docker exec -it $cntrl_con bash -c "openssl pkcs12 -export -out /var/opt/magma/bin/admin_operator.pfx -inkey /var/opt/magma/bin/admin_operator.key.pem -in /var/opt/magma/bin/admin_operator.pem"`  
 (press Enter twice)  
-8.4 `for certfile in admin_operator.pem admin_operator.key.pem admin_operator.pfx; do docker cp ${cntrl_con}:/var/opt/magma/bin/${certfile} /magma/certs//${certfile}; done`  
+8.4 `for certfile in admin_operator.pem admin_operator.key.pem admin_operator.pfx; do docker cp ${cntrl_con}:/var/opt/magma/bin/${certfile} /magma/certs/${certfile}; done`  
   
 ## 9 Roll out NMS stack ##  
 
