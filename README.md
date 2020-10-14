@@ -38,8 +38,8 @@ All steps are executed on both servers, orch1 and orch2
   
 2.1 `apt install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y`  
 2.2 `curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -  
-add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"  
-2.3 apt update`  
+add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"`  
+2.3 `apt update`  
 2.4 `apt install docker-ce docker-ce-cli containerd.io -y`  
 2.5 `systemctl start docker && systemctl enable docker`  
   
