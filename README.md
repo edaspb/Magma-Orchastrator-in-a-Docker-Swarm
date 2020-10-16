@@ -1,4 +1,4 @@
-# Magma Orchastrator on Docker Swarm
+# Magma Orchastrator (v1.2.0) on Docker Swarm
 Step-by-Step Installation Notes
 
 Links:  
