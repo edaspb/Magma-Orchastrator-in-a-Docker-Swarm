@@ -99,6 +99,9 @@ On Orch1:
 
 7.1 `wget https://raw.githubusercontent.com/edaspb/Magma-Orchastrator-in-a-Docker-Swarm/master/compose/docker-compose-controller.yml`  
 7.2 `wget https://raw.githubusercontent.com/edaspb/Magma-Orchastrator-in-a-Docker-Swarm/master/compose/docker-compose-metrics.yml`  
+
+Please modify docker-compose-controller.yml and docker-compose-metrics.yml according to your repo/images/lables names.  
+
 7.3 `docker stack deploy --compose-file docker-compose-controller.yml magma`  
 7.4 `docker stack deploy --compose-file docker-compose-metrics.yml magma`  
   
@@ -117,6 +120,9 @@ On Orch1:
 On Orch1:  
   
 9.1 `wget https://raw.githubusercontent.com/edaspb/Magma-Orchastrator-in-a-Docker-Swarm/master/compose/docker-compose-nms.yml`  
+
+Please modify docker-compose-nms.yml according to your repo/images/lables names.  
+
 9.2 `docker stack deploy --compose-file docker-compose-nms.yml magma`  
 Wait few minutes...  
 9.3 `export nms_con=magma_magmalte.1.$(docker service ps -f 'name=magma_magmalte.1' magma_magmalte -q --no-trunc | head -n1)`  
