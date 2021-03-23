@@ -1,0 +1,70 @@
+version: "3.7"
+
+services:
+  mariadb:
+    image: mariadb:10.4.12
+    volumes:
+      - nmsdb:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: nms
+      MYSQL_USER: nms
+      MYSQL_PASSWORD: nmsPass
+#      SQL_MODE: ANSI_QUOTES
+#    command: mysqld --sql_mode="ANSI_QUOTES"
+    healthcheck:
+      test: mysqladmin ping -p12345
+
+  magmalte:
+    image: yotanica/magmalte:v1.4.0 ## Use your repo here
+    ports:
+      - "8081:8081"
+    environment:
+      API_CERT_FILENAME: /run/secrets/api_cert
+      API_PRIVATE_KEY_FILENAME: /run/secrets/api_key
+      API_HOST: ${API_HOST:-nginx:9443}
+      PORT: 8081
+      HOST: 0.0.0.0
+      MYSQL_HOST: mariadb
+      MYSQL_DB: nms
+      MYSQL_USER: nms 
+      MYSQL_PASS: nmsPass  ## Do not forget to change
+      MAPBOX_ACCESS_TOKEN: ${MAPBOX_ACCESS_TOKEN:-}
+      MYSQL_DIALECT: mariadb
+    command: "/usr/local/bin/wait-for-it.sh -s -t 30 mariadb:3306 -- yarn run start:dev"
+    volumes:
+      - /magma/magmalte/fbcnms-magma-api:/usr/src/packages/fbcnms-magma-api
+      - /magma/magmalte/app:/usr/src/packages/magmalte/app
+      - /magma/magmalte/scripts:/usr/src/packages/magmalte/scripts
+      - /magma/magmalte/server:/usr/src/packages/magmalte/server
+      - /magma/magmalte/grafana:/usr/src/packages/magmalte/grafana
+      - /magma/magmalte/alerts:/usr/src/packages/magmalte/alerts
+    restart: on-failure
+    depends_on:
+      - mariadb
+    secrets:
+      - api_cert
+      - api_key
+    deploy:
+      placement:
+        constraints: [node.labels.metrics == true]
+
+  nginx-proxy:
+    image: nginx
+    ports:
+      - "443:443"
+    volumes:
+      - /magma/docker_ssl_proxy:/etc/nginx/conf.d
+    depends_on:
+      - magmalte
+    deploy:
+      placement:
+        constraints: [node.labels.metrics == true]
+
+secrets:
+  api_cert:
+    file: /magma/certs/admin_operator.pem
+  api_key:
+    file: /magma/certs/admin_operator.key.pem
+volumes:
+  nmsdb:
