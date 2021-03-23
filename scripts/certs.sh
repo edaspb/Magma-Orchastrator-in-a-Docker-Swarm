@@ -1,17 +1,17 @@
 #!/bin/bash
 
-#Put your info here:
-domain='yordomain'
-st='Country'
-o='Company'
-email='your@email.com'
-#
+domain=$1
+st='US'
+o='Facebook'
+email='admin@facebook.com'
+
 
 worDir=/magma/certs
 days='3650'
-rm $worDir/*
-## GEnerating RSA private key
 
+rm $worDir/*
+
+## GEnerating RSA private key
 openssl genrsa -out $worDir/rootCA.key 2048
 openssl req -x509 -new -nodes -key $worDir/rootCA.key -sha256 -days $days -subj "/C=NI/ST=$st/O=$o/OU=IT/CN=rootca.$domain/emailAddress=$email" -out $worDir/rootCA.pem
 openssl genrsa -out $worDir/controller.key 2048
