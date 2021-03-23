@@ -2,22 +2,23 @@ version: "3.7"
 
 services:
   prometheus-cache:
-    image: repo/prometheus-cache:1.2.0 ## Use your repo here
+    image: facebookincubator/prometheus-edge-hub:1.1.0
     ports:
       - 9091:9091/tcp
+      - 9092:9092/tcp
     command:
       - '-limit=500000'
+      - '-grpc-port=9092'
     deploy:
       placement:
         constraints: [node.labels.metrics == true]
 
   prometheus:
-    image: prom/prometheus
+    image: prom/prometheus:v2.20.1
     ports:
       - 9090:9090/tcp
     volumes:
-      - /magma/prometheus:/prometheus
-      - /magma/prometheus-configurer/configs:/etc/prometheus:ro
+      - /magma/metrics-configs:/etc/prometheus:ro
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
       - '--storage.tsdb.path=/prometheus'
@@ -31,15 +32,15 @@ services:
     ports:
       - 9093:9093/tcp
     volumes:
-      - /magma/alertmanager-configurer/configs:/etc/configs:ro
+      - /magma/metrics-configs:/etc/alertmanager:ro
     deploy:
       placement:
         constraints: [node.labels.metrics == true]
 
   prometheus-configurer:
-    image: repo/prometheus-configurer:1.2.0 ## Use your repo here
+    image: facebookincubator/prometheus-configurer:1.0.0
     volumes:
-      - /magma/prometheus-configurer/configs:/etc/configs
+      - /magma/metrics-configs:/etc/configs
     command:
       - '-port=9100'
       - '-rules-dir=/etc/configs/alert_rules'
@@ -51,9 +52,9 @@ services:
         constraints: [node.labels.metrics == true]
 
   alertmanager-configurer:
-    image: repo/alertmanager-configurer:1.2.0 ## Use your repo here
+    image: facebookincubator/alertmanager-configurer:1.0.0
     volumes:
-      - /magma/alertmanager-configurer/configs:/etc/configs
+      - /magma/metrics-configs:/etc/configs
     command:
       - '-port=9101'
       - '-alertmanager-conf=/etc/configs/alertmanager.yml'
